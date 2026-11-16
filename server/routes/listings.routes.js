@@ -7,3 +7,16 @@
 // const router = express.Router();
 // router.get("/", ...);
 // module.exports = router;
+
+const express = require("express");
+const {
+  getListings,
+  getListingById,
+} = require("../controllers/listings.controller");
+
+const router = express.Router();
+
+router.get("/", getListings);
+router.get("/:id", getListingById);
+
+module.exports = router;

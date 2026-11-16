@@ -10,3 +10,36 @@
 //      module.exports = { sql, poolPromise };
 //
 // See docs/mssql-cheatsheet.md for a full example.
+
+
+const path = require("node:path");
+require("dotenv").config({
+  path: path.join(__dirname, "..", ".env"),
+  quiet: true,
+});
+
+const sql = require("mssql");
+
+const config = {
+  server: process.env.DB_SERVER,
+  port: Number(process.env.DB_PORT) || 1433,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  pool: { max: 3 },
+  options: {
+    encrypt: true,
+    trustServerCertificate: true,
+  },
+};
+
+const poolPromise = new sql.ConnectionPool(config).connect();
+
+// מי שעושה await ל-poolPromise עדיין יקבל את שגיאת החיבור.
+poolPromise.catch(() => {});
+
+module.exports = { sql, poolPromise };
+
+
+
+
